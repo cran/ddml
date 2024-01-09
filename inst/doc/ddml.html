@@ -342,7 +342,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 <div id="introduction" class="section level1">
 <h1>Introduction</h1>
-<p>This article is a introduction to double/debiased machine learning
+<p>This article is an introduction to double/debiased machine learning
 using short-stacking in R. Topics discussed below include:</p>
 <ol style="list-style-type: decimal">
 <li>Estimation with a single machine learner</li>
@@ -373,10 +373,11 @@ details.</p>
 <code>?ddml_late</code>). The high-dimensional nuisance parameters
 arising in the estimate of the LATE are conditional expectation
 functions of the control variables <span class="math inline">\(X\)</span>. In particular, we require first step
-estimates of <span class="math inline">\(E[Y|Z=z, X], E[D|Z=z,
-X]\)</span> for <span class="math inline">\(z=0,1\)</span> and <span class="math inline">\(E[Z|X]\)</span>. In the absence of functional form
-assumptions, these conditional expectations need to be estimated
-nonparametrically.</p>
+estimates of the reduced forms <span class="math inline">\(E[Y|Z=z, X],
+E[D|Z=z, X]\)</span> for <span class="math inline">\(z=0,1\)</span> and
+<span class="math inline">\(E[Z|X]\)</span>. In the absence of
+functional form assumptions, these conditional expectations need to be
+estimated nonparametrically.</p>
 <p>Here, we consider gradient boosting from the popular <a href="https://rdrr.io/cran/xgboost/">xgboost</a> package to estimate the
 nuisance parameters. The function <code>mdl_xgboost</code> is a wrapper
 for <code>xgboost</code>, allowing to specify all parameters of the

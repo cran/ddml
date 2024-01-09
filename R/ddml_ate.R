@@ -1,13 +1,15 @@
-#' Estimator of the Average Treatment Effect.
+#' Estimators of Average Treatment Effects.
 #'
 #' @family ddml
 #'
-#' @seealso [ddml::summary.ddml_ate()]
+#' @seealso [ddml::summary.ddml_ate()], [ddml::summary.ddml_att()]
 #'
-#' @description Estimator of the average treatment effect.
+#' @description Estimators of the average treatment effect and the average
+#'     treatment effect on the treated.
 #'
-#' @details \code{ddml_ate} provides a double/debiased machine learning
-#'     estimator for the average treatment effect in the interactive model
+#' @details \code{ddml_ate} and \code{ddml_att} provide double/debiased machine
+#'     learning  estimators for the average treatment effect and the average
+#'     treatment effect on the treated, respectively, in the interactive model
 #'     given by
 #'
 #' \eqn{Y = g_0(D, X) + U,}
@@ -21,8 +23,12 @@
 #'
 #' \eqn{\theta_0^{\textrm{ATE}} \equiv E[g_0(1, X) - g_0(0, X)]}.
 #'
+#' and the average treatment effect on the treated is defined as
+#'
+#' \eqn{\theta_0^{\textrm{ATT}} \equiv E[g_0(1, X) - g_0(0, X)\vert D = 1]}.
+#'
 #' @inheritParams ddml_plm
-#' @param D Binary endogenous variable of interest.
+#' @param D The binary endogenous variable of interest.
 #' @param subsamples_D0,subsamples_D1 List of vectors with sample indices for
 #'     cross-fitting, corresponding to untreated and treated observations,
 #'     respectively.
@@ -31,12 +37,13 @@
 #'     for cross-validation. Arguments are separated for untreated and treated
 #'     observations, respectively.
 #'
-#' @return \code{ddml_ate} returns an object of S3 class
-#'     \code{ddml_ate}. An object of class \code{ddml_ate} is a list containing
+#' @return \code{ddml_ate} and \code{ddml_att} return an object of S3 class
+#'     \code{ddml_ate} and \code{ddml_att}, respectively. An object of class
+#'     \code{ddml_ate} or \code{ddml_att} is a list containing
 #'     the following components:
 #'     \describe{
-#'         \item{\code{ate}}{A vector with the average treatment effect
-#'             estimates.}
+#'         \item{\code{ate} / \code{att}}{A vector with the average treatment
+#'             effect / average treatment effect on the treated estimates.}
 #'         \item{\code{weights}}{A list of matrices, providing the weight
 #'             assigned to each base learner (in chronological order) by the
 #'             ensemble procedure.}
@@ -44,7 +51,8 @@
 #'             base learner (in chronological order) computed by the
 #'             cross-validation step in the ensemble construction.}
 #'         \item{\code{psi_a}, \code{psi_b}}{Matrices needed for the computation
-#'             of scores. Used in [ddml::summary.ddml_ate()].}
+#'             of scores. Used in [ddml::summary.ddml_ate()] or
+#'             [ddml::summary.ddml_att()].}
 #'         \item{\code{learners},\code{learners_DX},
 #'             \code{subsamples_D0},\code{subsamples_D1},
 #'             \code{cv_subsamples_list_D0},\code{cv_subsamples_list_D1},
@@ -78,13 +86,17 @@
 #' summary(ate_fit)
 #'
 #' # Estimate the average treatment effect using short-stacking with base
-#' #     learners ols, lasso, and ridge.
+#' #     learners ols, lasso, and ridge. We can also use custom_ensemble_weights
+#' #     to estimate the ATE using every individual base learner.
+#' weights_everylearner <- diag(1, 3)
+#' colnames(weights_everylearner) <- c("mdl:ols", "mdl:lasso", "mdl:ridge")
 #' ate_fit <- ddml_ate(y, D, X,
 #'                     learners = list(list(fun = ols),
 #'                                     list(fun = mdl_glmnet),
 #'                                     list(fun = mdl_glmnet,
 #'                                          args = list(alpha = 0))),
 #'                     ensemble_type = 'nnls',
+#'                     custom_ensemble_weights = weights_everylearner,
 #'                     shortstack = TRUE,
 #'                     sample_folds = 2,
 #'                     silent = TRUE)
@@ -96,6 +108,8 @@ ddml_ate <- function(y, D, X,
                      ensemble_type = "nnls",
                      shortstack = FALSE,
                      cv_folds = 5,
+                     custom_ensemble_weights = NULL,
+                     custom_ensemble_weights_DX = custom_ensemble_weights,
                      subsamples_D0 = NULL,
                      subsamples_D1 = NULL,
                      cv_subsamples_list_D0 = NULL,
@@ -106,7 +120,6 @@ ddml_ate <- function(y, D, X,
   is_D0 <- which(D == 0)
   nobs_D0 <- length(is_D0)
   nobs_D1 <- nobs - nobs_D0
-  nensb <- length(ensemble_type)
 
   # Create sample fold tuple by treatment
   if (is.null(subsamples_D0) | is.null(subsamples_D1)) {
@@ -158,6 +171,7 @@ ddml_ate <- function(y, D, X,
   y_X_D0_res <- get_CEF(y[is_D0], X[is_D0, , drop = F],
                         learners = learners, ensemble_type = ensemble_type,
                         shortstack = shortstack,
+                        custom_ensemble_weights = custom_ensemble_weights,
                         cv_subsamples_list = cv_subsamples_list_D0,
                         subsamples = subsamples_D0,
                         silent = silent, progress = "E[Y|D=0,X]: ",
@@ -167,6 +181,7 @@ ddml_ate <- function(y, D, X,
   y_X_D1_res <- get_CEF(y[-is_D0], X[-is_D0, , drop = F],
                         learners = learners, ensemble_type = ensemble_type,
                         shortstack = shortstack,
+                        custom_ensemble_weights = custom_ensemble_weights,
                         cv_subsamples_list = cv_subsamples_list_D1,
                         subsamples = subsamples_D1,
                         silent = silent, progress = "E[Y|D=1,X]: ",
@@ -176,9 +191,14 @@ ddml_ate <- function(y, D, X,
   D_X_res <- get_CEF(D, X,
                      learners = learners_DX, ensemble_type = ensemble_type,
                      shortstack = shortstack,
+                     custom_ensemble_weights = custom_ensemble_weights_DX,
                      cv_subsamples_list = cv_subsamples_list,
                      subsamples = subsamples,
-                     silent = silent, progress = "E[D|,X]: ")
+                     silent = silent, progress = "E[D|X]: ")
+
+  # Update ensemble type to account for (optional) custom weights
+  ensemble_type <- dimnames(y_X_D0_res$weights)[[2]]
+  nensb <- ifelse(is.null(ensemble_type), 1, length(ensemble_type))
 
   # Check whether multiple ensembles are computed simultaneously
   multiple_ensembles <- nensb > 1
@@ -244,8 +264,9 @@ ddml_ate <- function(y, D, X,
 #'
 #' @description Inference methods for treatment effect estimators.
 #'
-#' @param object An object of class \code{ddml_ate} and \code{ddml_late}, as
-#'     fitted by [ddml::ddml_ate()] and [ddml::ddml_late()], respectively.
+#' @param object An object of class \code{ddml_ate}, \code{ddml_att}, and
+#'     \code{ddml_late}, as fitted by [ddml::ddml_ate()], [ddml::ddml_att()],
+#'     and [ddml::ddml_late()], respectively.
 #' @param ... Currently unused.
 #'
 #' @return A matrix with inference results.
