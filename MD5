@@ -1,9 +1,9 @@
-c4751b927db2b3893a4bca7eb83870de *DESCRIPTION
+01ff35ad4fdea8a110acb6950b9965ce *DESCRIPTION
 fffca98e58f0c2672ef8ab4c57cd2f35 *NAMESPACE
-e3c52f9e5a3c9cbde1f5e9418680e831 *NEWS.md
+1fcb43ec811d9bb6a5f1eee6e7a5f490 *NEWS.md
 1c738b4f1dcac94295b0bcf32a0e2b0d *R/AE98.R
 942d71d65eef14727bc4ca588e9a0c00 *R/crosspred.R
-6a9f79ff27b39157b631336f803d5203 *R/crossval.R
+f46158a1a36679548fb0c5485d237b69 *R/crossval.R
 050b797ae303a3ebf5b95e6a43e540bc *R/ddml.R
 28bdf0b4c52df9acf5fb7e9bc9242029 *R/ddml_ate.R
 8748b7979382b3bad0c80f3a4f46035e *R/ddml_att.R
@@ -17,7 +17,7 @@ db333656b5e85041caf394f7c5a60136 *R/ddml_pliv.R
 006dec4b24df8988c416d8a03fda3f83 *R/ml_wrappers.R
 c8452eb3cece74f7c3dcf724c2b7c4cd *R/ols.R
 b558c313902d9f9607d9b3ede139b982 *R/shortstacking.R
-a12914e7f07996aed69b44d8d737498e *README.md
+ee4c39c81fd4add2e297e6827a86eb19 *README.md
 ab1262ec1c6a326772d567bc6d6ec847 *build/vignette.rds
 2167ba7930f91561710c79ec585826c6 *data/AE98.rda
 7f87bb966357a01984a2dd0fad5471fe *inst/doc/ddml.Rmd
@@ -41,10 +41,10 @@ b87de57a62041c41c7e5903fb93ab4b3 *man/summary.ddml_ate.Rd
 ec4662cb8c0f9c2e07bb788c8fda6542 *man/summary.ddml_plm.Rd
 4ee56cae8617b38b06d73249565ca84b *tests/testthat.R
 a3f2b3ce53c526c17e90ddfd22525461 *tests/testthat/test-crosspred.R
-3624a4123e3cf4b8be761c6b55c208ea *tests/testthat/test-crossval.R
+2aa456391b4c90bfc98b6b9b774db039 *tests/testthat/test-crossval.R
 0461fc73da445d42d45e2f86e04e0460 *tests/testthat/test-ddml_ate.R
 4995a218e71a9fe4f2a251a87dd49713 *tests/testthat/test-ddml_att.R
-78a15cb42abb590f9106cb30aec3c84f *tests/testthat/test-ddml_fpliv.R
+52c77f8735a72bfada5475e3520360e0 *tests/testthat/test-ddml_fpliv.R
 5778114b57ed9487eda6d9ac070fe261 *tests/testthat/test-ddml_late.R
 2a2c6192f724f2a13030b84a469cd069 *tests/testthat/test-ddml_pliv.R
 c507c823ba97becff62fdbb5f6ac0f58 *tests/testthat/test-ddml_plm.R
