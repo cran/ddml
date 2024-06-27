@@ -271,8 +271,18 @@ summary.ddml_pliv <- function(object, ...) {
   single_learner <- ("what" %in% names(object$learners))
   if (single_learner) object$ensemble_type <- "single base learner"
   # Compute and print inference results
-  cat("PLIV estimation results: \n \n")
-  organize_inf_results(fit_obj_list = object$iv_fit,
-                       ensemble_type = object$ensemble_type,
-                       ...)
+  coefficients <- organize_inf_results(fit_obj_list = object$iv_fit,
+                                       ensemble_type = object$ensemble_type,
+                                       ...)
+  class(coefficients) <- c("summary.ddml_pliv", class(coefficients))
+  coefficients
 }#SUMMARY.DDML_PLIV
+
+#' @rdname print.summary.ddml_plm
+#'
+#' @export
+print.summary.ddml_pliv <- function(x, digits = 3, ...) {
+  cat("PLIV estimation results: \n \n")
+  class(x) <- class(x)[-1]
+  print(x, digits = digits)
+}#PRINT.SUMMARY.DDML_PLIV

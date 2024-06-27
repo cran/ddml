@@ -401,8 +401,8 @@ learner in each cross-fitting sample fold.</p>
 <span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(late_fit)</span>
 <span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; LATE estimation results: </span></span>
 <span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  </span></span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     Estimate Std. Error   t value  Pr(&gt;|t|)</span></span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   -0.2680106  0.2449627 -1.094087 0.2739166</span></span></code></pre></div>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   Estimate Std. Error t value Pr(&gt;|t|)</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     -0.244      0.196   -1.25    0.213</span></span></code></pre></div>
 <p>(Note that estimation here is based on a random subsample of 5,000
 observations. The results can thus not readily be compared to those in
 Angrist &amp; Evans (1998).)</p>
@@ -449,8 +449,8 @@ coefficients that are constrained to be non-negative and sum to one.</p>
 <span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(late_fit)</span>
 <span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; LATE estimation results: </span></span>
 <span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  </span></span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;       Estimate Std. Error    t value  Pr(&gt;|t|)</span></span>
-<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; nnls1 -0.19173  0.2005266 -0.9561322 0.3390054</span></span></code></pre></div>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;       Estimate Std. Error t value Pr(&gt;|t|)</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; nnls1   -0.212      0.188   -1.12    0.261</span></span></code></pre></div>
 <p>It is often insightful to see which base learners contribute the most
 to the final reduced form estimates. The below snippet shows the weights
 for the reduced forms <span class="math inline">\(E[Y|Z=0,X]\)</span>
@@ -496,11 +496,11 @@ learners</li>
 <span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(late_fit)</span>
 <span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; LATE estimation results: </span></span>
 <span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  </span></span>
-<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;              Estimate Std. Error   t value  Pr(&gt;|t|)</span></span>
-<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; nnls       -0.2432971  0.2120355 -1.147436 0.2512017</span></span>
-<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; singlebest -0.2518913  0.1967114 -1.280512 0.2003652</span></span>
-<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ols        -0.2417658  0.2122186 -1.139230 0.2546073</span></span>
-<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; average    -0.2117828  0.1958048 -1.081601 0.2794296</span></span></code></pre></div>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;            Estimate Std. Error t value Pr(&gt;|t|)</span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; nnls         -0.232      0.190   -1.22    0.222</span></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; singlebest   -0.232      0.190   -1.22    0.223</span></span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ols          -0.237      0.190   -1.24    0.214</span></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; average      -0.223      0.188   -1.18    0.237</span></span></code></pre></div>
 </div>
 <div id="references" class="section level1">
 <h1>References</h1>

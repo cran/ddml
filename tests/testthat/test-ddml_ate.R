@@ -7,11 +7,13 @@ test_that("ddml_ate computes with a single model", {
   y <- D + X %*% runif(40) + rnorm(nobs)
   # Define arguments
   learners <- list(what = ols)
-  ddml_ate_fit <- ddml_ate(y, D, X,
-                           learners = learners,
-                           cv_folds = 3,
-                           sample_folds = 3,
-                           silent = T)
+  expect_warning({
+    ddml_ate_fit <- ddml_ate(y, D, X,
+                             learners = learners,
+                             cv_folds = 3,
+                             sample_folds = 3,
+                             silent = T)
+  })
   # Check output with expectations
   expect_equal(length(ddml_ate_fit$ate), 1)
 })#TEST_THAT
@@ -27,12 +29,14 @@ test_that("ddml_ate computes with an ensemble procedure", {
   learners <- list(list(fun = ols),
                    list(fun = ols))
   # Compute DDML PLM estimator
-  ddml_ate_fit <- ddml_ate(y, D, X,
-                           learners = learners,
-                           ensemble_type = "ols",
-                           cv_folds = 3,
-                           sample_folds = 3,
-                           silent = T)
+  expect_warning({
+    ddml_ate_fit <- ddml_ate(y, D, X,
+                             learners = learners,
+                             ensemble_type = "ols",
+                             cv_folds = 3,
+                             sample_folds = 3,
+                             silent = T)
+  })
   # Check output with expectations
   expect_equal(length(ddml_ate_fit$ate), 1)
 })#TEST_THAT
@@ -48,14 +52,16 @@ test_that("ddml_ate computes w/ multiple ensembles + custom weights", {
   learners <- list(list(fun = ols),
                    list(fun = ols))
   # Compute DDML PLM estimator
-  ddml_ate_fit <- ddml_ate(y, D, X,
-                           learners,
-                           ensemble_type = c("ols", "nnls",
-                                             "singlebest", "average"),
-                           cv_folds = 3,
-                           custom_ensemble_weights = diag(1, 2),
-                           sample_folds = 3,
-                           silent = T)
+  expect_warning({
+    ddml_ate_fit <- ddml_ate(y, D, X,
+                             learners,
+                             ensemble_type = c("ols", "nnls",
+                                               "singlebest", "average"),
+                             cv_folds = 3,
+                             custom_ensemble_weights = diag(1, 2),
+                             sample_folds = 3,
+                             silent = T)
+  })
   # Check output with expectations
   expect_equal(length(ddml_ate_fit$ate), 6)
 })#TEST_THAT
@@ -70,14 +76,16 @@ test_that("ddml_ate computes with multiple ensemble procedures & shortstack", {
   # Define arguments
   learners <- list(list(fun = ols))
   # Compute DDML PLM estimator
-  ddml_ate_fit <- ddml_ate(y, D, X,
-                           learners,
-                           ensemble_type = c("ols", "nnls",
-                                             "singlebest", "average"),
-                           shortstack = TRUE,
-                           cv_folds = 3,
-                           sample_folds = 3,
-                           silent = T)
+  expect_warning({
+    ddml_ate_fit <- ddml_ate(y, D, X,
+                             learners,
+                             ensemble_type = c("ols", "nnls",
+                                               "singlebest", "average"),
+                             shortstack = TRUE,
+                             cv_folds = 3,
+                             sample_folds = 3,
+                             silent = T)
+  })
   # Check output with expectations
   expect_equal(length(ddml_ate_fit$ate), 4)
 })#TEST_THAT
@@ -91,12 +99,16 @@ test_that("summary.ddml_ate computes with a single model", {
   y <- D + X %*% runif(40) + rnorm(nobs)
   # Define arguments
   learners <- list(what = ols)
-  ddml_ate_fit <- ddml_ate(y, D, X,
-                           learners = learners,
-                           cv_folds = 3,
-                           sample_folds = 3,
-                           silent = T)
-  capture_output({inf_res <- summary(ddml_ate_fit)})
+  expect_warning({
+    ddml_ate_fit <- ddml_ate(y, D, X,
+                             learners = learners,
+                             cv_folds = 3,
+                             sample_folds = 3,
+                             silent = T)
+  })
+  # Compute inference results & test print
+  inf_res <- summary(ddml_ate_fit)
+  capture_output({print(inf_res)}, print = FALSE)
   # Check output with expectations
   expect_equal(length(inf_res), 4)
 })#TEST_THAT
@@ -111,14 +123,18 @@ test_that("summary.ddml_ate computes with multiple ensemble procedures", {
   # Define arguments
   learners <- list(list(fun = ols))
   # Compute DDML PLM estimator
-  ddml_ate_fit <- ddml_ate(y, D, X,
-                           learners,
-                           ensemble_type = c("ols", "nnls",
-                                             "singlebest", "average"),
-                           cv_folds = 3,
-                           sample_folds = 3,
-                           silent = T)
-  capture_output({inf_res <- summary(ddml_ate_fit)}, print = FALSE)
+  expect_warning({
+    ddml_ate_fit <- ddml_ate(y, D, X,
+                             learners,
+                             ensemble_type = c("ols", "nnls",
+                                               "singlebest", "average"),
+                             cv_folds = 3,
+                             sample_folds = 3,
+                             silent = T)
+  })
+  # Compute inference results & test print
+  inf_res <- summary(ddml_ate_fit)
+  capture_output({print(inf_res)}, print = FALSE)
   # Check output with expectations
   expect_equal(length(inf_res), 16)
 })#TEST_THAT

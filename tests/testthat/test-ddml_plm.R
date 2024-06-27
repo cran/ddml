@@ -171,7 +171,8 @@ test_that("summary.ddml_plm computes with a single model", {
                            cv_folds = 3,
                            sample_folds = 3,
                            silent = T)
-  capture_output({inf_res <- summary(ddml_plm_fit)})
+  inf_res <- summary(ddml_plm_fit, type = "HC1")
+  capture_output(print(inf_res), print = FALSE)
   # Check output with expectations
   expect_equal(length(inf_res), 8)
 })#TEST_THAT
@@ -197,7 +198,8 @@ test_that("summary.ddml_plm computes with multiple ensemble procedures", {
                            custom_ensemble_weights = diag(1, length(learners)),
                            sample_folds = 3,
                            silent = T)
-  capture_output({inf_res <- summary(ddml_plm_fit, type = "HC1")})
+  inf_res <- summary(ddml_plm_fit, type = "HC1")
+  capture_output(print(inf_res), print = FALSE)
   # Check output with expectations
   expect_equal(length(inf_res), 8 * 7)
 })#TEST_THAT

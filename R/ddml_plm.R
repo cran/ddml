@@ -320,8 +320,43 @@ summary.ddml_plm <- function(object, ...) {
   single_learner <- ("what" %in% names(object$learners))
   if (single_learner) object$ensemble_type <- "single base learner"
   # Compute and print inference results
-  cat("PLM estimation results: \n \n")
-  organize_inf_results(fit_obj_list = object$ols_fit,
-                       ensemble_type = object$ensemble_type,
-                       ...)
+  coefficients <- organize_inf_results(fit_obj_list = object$ols_fit,
+                                       ensemble_type = object$ensemble_type,
+                                       ...)
+  class(coefficients) <- c("summary.ddml_plm", class(coefficients))
+  coefficients
 }#SUMMARY.DDML_PLM
+
+#' Print Methods for Treatment Effect Estimators.
+#'
+#' @description Inference methods for treatment effect estimators.
+#'
+#' @param x An object of class \code{summary.ddml_plm},
+#'     \code{summary.ddml_pliv}, and \code{summary.ddml_fpliv}, as
+#'     returned by [ddml::summary.ddml_plm()], [ddml::summary.ddml_pliv()],
+#'     and [ddml::summary.ddml_fpliv()], respectively.
+#' @param digits Number of significant digits used for priniting.
+#' @param ... Currently unused.
+#'
+#' @return NULL.
+#'
+#' @export
+#'
+#' @examples
+#' # Construct variables from the included Angrist & Evans (1998) data
+#' y = AE98[, "worked"]
+#' D = AE98[, "morekids"]
+#' X = AE98[, c("age","agefst","black","hisp","othrace","educ")]
+#'
+#' # Estimate the partially linear model using a single base learner, ridge.
+#' plm_fit <- ddml_plm(y, D, X,
+#'                     learners = list(what = mdl_glmnet,
+#'                                     args = list(alpha = 0)),
+#'                     sample_folds = 2,
+#'                     silent = TRUE)
+#' summary(plm_fit)
+print.summary.ddml_plm <- function(x, digits = 3, ...) {
+  cat("PLM estimation results: \n \n")
+  class(x) <- class(x)[-1]
+  print(x, digits = digits)
+}#PRINT.SUMMARY.DDML_PLM
