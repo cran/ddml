@@ -1,7 +1,7 @@
 Package: ddml
 Title: Double/Debiased Machine Learning
-Version: 0.2.2
-Date: 2024-06-26
+Version: 0.3.0
+Date: 2024-10-02
 Authors@R: c(
     person("Achim", "Ahrens", role = "aut"),
     person("Christian B", "Hansen", role = "aut"),
@@ -26,11 +26,11 @@ Suggests: sandwich, covr, testthat (>= 3.0.0), knitr, rmarkdown
 Config/testthat/edition: 3
 VignetteBuilder: knitr
 NeedsCompilation: no
-Packaged: 2024-06-26 23:53:58 UTC; thomas
+Packaged: 2024-10-02 15:38:02 UTC; thomas
 Author: Achim Ahrens [aut],
   Christian B Hansen [aut],
   Mark E Schaffer [aut],
   Thomas Wiemann [aut, cre]
 Maintainer: Thomas Wiemann <wiemann@uchicago.edu>
 Repository: CRAN
-Date/Publication: 2024-06-27 00:10:02 UTC
+Date/Publication: 2024-10-02 20:20:18 UTC
