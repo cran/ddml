@@ -1,3 +1,10 @@
+# ddml 0.3.1
+
+* Updates internals of ``ddml::mdl_xgboost()`` with new ``xgboost`` syntax.
+* Fixes ``ddml::ddml_fpliv()`` with custom weights.
+* Allows for stacking with no positive stacking weights.
+* Fixes ``ddml::mdl_glmnet`` predictions for binomial regression.
+
 # ddml 0.3.0
 
 * Implements one-way clustered inference.

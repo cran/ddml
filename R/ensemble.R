@@ -10,6 +10,22 @@ ensemble <- function(y, X, Z = NULL,
                      progress = NULL) {
   # Data parameters
   nlearners <- length(learners)
+  # Check if y is constant
+  if (length(unique(y)) == 1) {
+    warning(paste("Outcome variable y is constant. Ensemble will return",
+                   "mean(y) for all predictions."))
+    # Return minimal output needed for predictions
+    output <- list(
+      mdl_fits = NULL,
+      weights = NULL,
+      learners = learners,
+      cv_results = NULL,
+      mean_y = mean(y),
+      constant_y = TRUE
+    )
+    class(output) <- "ensemble"
+    return(output)
+  }#IF
   # Compute ensemble weights
   ens_w_res <- ensemble_weights(y, X, Z,
                                 type = type, learners = learners,
@@ -22,6 +38,9 @@ ensemble <- function(y, X, Z = NULL,
   cv_results <- ens_w_res$cv_results
   # Check for excluded learners
   mdl_include <- which(rowSums(abs(weights)) > 0)
+  if (length(mdl_include) == 0) {
+    warning("None of the learners are assigned positive stacking weights.")
+  }#IF
   # Compute fit for each included model
   mdl_fits <- rep(list(NULL), nlearners)
   for (m in 1:nlearners) {
@@ -43,21 +62,31 @@ ensemble <- function(y, X, Z = NULL,
                             Z[, assign_Z])
     mdl_fits[[m]] <- do.call(do.call, mdl_fun)
   }#FOR
+
   # Organize and return output
   output <- list(mdl_fits = mdl_fits, weights = weights,
-                 learners = learners, cv_results = cv_results)
+                 learners = learners, cv_results = cv_results,
+                 mean_y = mean(y), constant_y = FALSE)
   class(output) <- "ensemble"
   return(output)
 }#ENSEMBLE
 
 # Complementary methods ========================================================
 
-# Prediction method for ensemble
+#' @exportS3Method
 predict.ensemble <- function(object, newdata, newZ = NULL, ...){
   # Data parameters
-  nlearners <- length(object$mdl_fits)
+  nlearners <- length(object$learners)
+  # If y was constant, return mean_y for all observations
+  if (!is.null(object$constant_y) && object$constant_y) {
+    return(matrix(object$mean_y, nrow(newdata), nlearners))
+  }#IF
   # Check for excluded learners
   mdl_include <- which(rowSums(abs(object$weights)) > 0)
+  if (length(mdl_include) == 0) {
+    fitted_ens <- matrix(object$mean_y, nrow(newdata), 1)
+    #warning("None of the learners are assigned positive stacking weights.")
+  }#IF
   # Calculate fitted values for each model
   first_fit <- T
   for (m in 1:nlearners) {
@@ -79,7 +108,7 @@ predict.ensemble <- function(object, newdata, newZ = NULL, ...){
     fitted_mat[, m] <- methods::as(fitted, "matrix")
   }#FOR
   # Compute matrix of fitted values by ensemble type and return
-  fitted_ens <- fitted_mat %*% object$weights
+  if (length(mdl_include) > 0) fitted_ens <- fitted_mat %*% object$weights
   return(fitted_ens)
 }#PREDICT.ENSEMBLE
 
